@@ -47,11 +47,8 @@ void ImpBrush::SetColor (const Point source)
 
 	float alpha = ((float)(pDoc->getAlpha()));
 	// get alpha value from slider and force cast
-
-	//std::cout << "alpha [0-255]: " << alpha << std::endl;
-	//std::cout << "alpha [0-1]: " << alpha / 255.0f << std::endl;
 	
-	GLubyte GLubyteAlpha = static_cast<GLubyte>(alpha / 255.0f);
+	GLubyte GLubyteAlpha = static_cast<GLubyte>(alpha);
 
 	GLubyte color[3];
 	
@@ -59,24 +56,28 @@ void ImpBrush::SetColor (const Point source)
 
 	memcpy ( color, pDoc->GetOriginalPixel( source ), 3 );
 
-	glColor4ub(color[0], color[1], color[2], alpha / 255.0f);
+	glColor4ub(color[0], color[1], color[2], GLubyteAlpha);
 
 }
 
 void ImpBrush::startMouseScaling(const Point source, const Point target)
 {
-	std::cout << "-------- - startMouseScaling() called---------" << std::endl;
+
 	startMouseX = target.x;
 	startMouseY = target.y;
-	std::cout << "start(x,y) = (" << startMouseX << ", " << startMouseY << ")" << std::endl;
+
+
 }
 
 void ImpBrush::stopMouseScaling(const Point source, const Point target)
 {
-	std::cout << "---------stopMouseScaling() called-------- - " << std::endl;
+
+
+
+	//std::cout << "---------stopMouseScaling() called-------- - " << std::endl;
 	stopMouseX = target.x;
 	stopMouseY = target.y;
-	std::cout << "stop(x,y) = (" << stopMouseX << ", " << stopMouseY << ")" << std::endl;
+	//std::cout << "stop(x,y) = (" << stopMouseX << ", " << stopMouseY << ")" << std::endl;
 	calculateSizeAndAngle();
 }
 
@@ -92,6 +93,7 @@ void ImpBrush::calculateSizeAndAngle() {
 	std::cout << "setSize: " << (float)((startMouseX - stopMouseX)*(startMouseX - stopMouseX) + (startMouseY - stopMouseY)*(startMouseY - stopMouseY)) << std::endl;
 	pDoc->setSize((int)mouseSize);
 
+	/*		REPLACED BY A FUNCTION INSTEAD
 	// get angle
 
 	float angle;
@@ -99,7 +101,7 @@ void ImpBrush::calculateSizeAndAngle() {
 	float y = stopMouseY - startMouseY;
 	angle = asinf(y / mouseSize);
 	angle = angle / degToRad;
-	std::cout << "true angle: " << angle << std::endl;
+	//std::cout << "true angle: " << angle << std::endl;
 
 	if (stopMouseX > startMouseX && stopMouseY > startMouseY) {
 		// first quadrant
@@ -121,12 +123,50 @@ void ImpBrush::calculateSizeAndAngle() {
 	}
 
 	std::cout << "modified angle: " << angle << std::endl;
-	pDoc->setAngle((int)angle);
+
+	*/
+	pDoc->setAngle((int)getMouseAngle(stopMouseX-startMouseX, stopMouseY - startMouseY));
 
 
 
 
 
+
+}
+
+float ImpBrush::getMouseAngle(int x, int y) {
+
+	// get angle
+	float degToRad = 3.141592f / 180.0f;
+	float mouseSize = sqrt((float)((x)*(x) + (y)*(y)));
+
+	float angle;
+
+	float deltaY = (float)y;
+	angle = asinf(deltaY / mouseSize);
+	angle = angle / degToRad;
+	std::cout << "true angle: " << angle << std::endl;
+
+	if (stopMouseX - startMouseX > 0 && stopMouseY - startMouseY> 0) {
+		// first quadrant
+	}
+	else if (stopMouseX - startMouseX< 0 && stopMouseY - startMouseY> 0) {
+		// second quadrant
+		angle = 180 - angle;
+
+	}
+	else if (stopMouseX - startMouseX< 0 && stopMouseY - startMouseY< 0) {
+		// third quadrant
+		angle = -1 * angle;
+
+	}
+	else if (stopMouseX - startMouseX> 0 && stopMouseY - startMouseY< 0) {
+		// forth quadrant
+		angle = angle + 180;
+
+	}
+
+	return angle;
 
 }
 
@@ -135,4 +175,6 @@ void ImpBrush::calculateSizeAndAngle() {
 void ImpBrush::dragMouseScaling(const Point source, const Point target)
 {
 
+	//TODO: Render a red line that shows the new line brush size and angle
 }
+

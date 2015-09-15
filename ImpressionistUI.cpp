@@ -258,6 +258,26 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 	pDoc->setBrushType(type);
 }
 
+
+//------- UI should keep track of the current for all the controls for answering the query from Doc ---------
+//-------------------------------------------------------------
+// Sets the type of brush direction you want to have
+// Called by the UI when a brush directioni is chosen in the brush direction choice
+//-------------------------------------------------------------
+
+/*
+void ImpressionistUI::cb_brushDirectionChoice(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI = ((ImpressionistUI *)(o->user_data()));
+	ImpressionistDoc* pDoc = pUI->getDocument();
+
+	int type = (int)v;
+
+
+	pDoc->setBrushType(type);
+}
+*/
+
 //------------------------------------------------------------
 // Clears the paintview canvas.
 // Called by the UI when the clear canvas button is pushed
@@ -486,6 +506,12 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {0}
 };
 
+/*
+Fl_Menu_Item ImpressionistUI::brushTypeMenu[1] = {
+	{ "Mouse direction", FL_ALT + 'f', (Fl_Callback *)ImpressionistUI::cb_brushDirectionChoice, (void *)BRUSH_POINTS },
+	{ 0 }
+};
+*/
 
 
 //----------------------------------------------------
@@ -517,16 +543,12 @@ ImpressionistUI::ImpressionistUI() {
 		Fl_Group::current()->resizable(group);
     m_mainWindow->end();
 
-	// setup alpha value
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
 	// init values
 
-	m_nSize = 10;
+	m_nSize = 20;
 	m_nCorner = 3;
-	m_nAlpha = 0;
+	m_nAlpha = 255;
 	m_nAngle = 0;
 	m_nLineWidth = 1;
 

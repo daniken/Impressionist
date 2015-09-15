@@ -29,6 +29,15 @@ void LineBrush::BrushBegin(const Point source, const Point target)
 
 	glPointSize((float)size);
 
+
+
+	mouseDirection = true;
+	// if mouse direction is chosen
+	if (mouseDirection) {
+		isDraging = true;
+		calculateMouseDirection(source, target);
+	}
+
 	BrushMove(source, target);
 
 }
@@ -43,39 +52,80 @@ void LineBrush::BrushMove(const Point source, const Point target)
 		return;
 	}
 
-	// size
-	int size = pDoc->getSize();
-	size = size / 2;
 
-	// rotation
-	float pi = 3.141592;
-	float degToRad = pi / 180;
-	float angle = (float)pDoc->getAngle();
+	if (mouseDirection) {
+		calculateMouseDirection(source, target);
+	}
+		// size
+		int size = pDoc->getSize();
+		size = size / 2;
 
-	// extension coordinates
-	int x = size*cos(angle*degToRad);
-	int y = size*sin(angle*degToRad);
+		// rotation
+		float pi = 3.141592;
+		float degToRad = pi / 180;
+		float angle = (float)pDoc->getAngle();
 
-	// line width
-	int lineWidth = pDoc->getLineWidth();
-	GLfloat width((float)lineWidth);
-	glLineWidth(width);
+		// extension coordinates
+		int x = size*cos(angle*degToRad);
+		int y = size*sin(angle*degToRad);
 
-	glBegin(GL_LINES);
-	SetColor(source);
+		// line width
+		int lineWidth = pDoc->getLineWidth();
+		GLfloat width((float)lineWidth);
+		glLineWidth(width);
 
-	
-	glVertex2i(target.x - x, target.y - y);
-	glVertex2i(target.x + x, target.y + y);
+		glBegin(GL_LINES);
+		SetColor(source);
 
 
-	glEnd();
-	glFlush();
+		glVertex2i(target.x - x, target.y - y);
+		glVertex2i(target.x + x, target.y + y);
+
+		
+		glEnd();
+		glFlush();
+
+
+
 }
 
 void LineBrush::BrushEnd(const Point source, const Point target)
 {
-	// do nothing so far
+	// stop the calculation of mouse direction 
+	if (mouseDirection) {
+		//isDraging = false;
+		//prevMouseX = 0;
+		//prevMouseY = 0;
+	}
+	
 }
 
 
+void LineBrush::calculateMouseDirection(const Point source, const Point target){
+
+
+
+	// set current mouse location
+	currentMouseX = target.x;
+	currentMouseY = target.y;
+
+	if (isDraging && prevMouseX != 0 && prevMouseY != 0){
+
+		// calculate the direction vector
+		int x = target.x - prevMouseX;
+		int y = target.y - prevMouseY;
+
+		float angle = ImpBrush::getMouseAngle(x, y);
+
+		ImpressionistDoc * pDoc = GetDocument();
+		pDoc->setAngle((int)angle);
+
+
+	}
+
+	prevMouseX = target.x;
+	prevMouseY = target.y;
+
+
+
+}

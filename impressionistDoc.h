@@ -25,6 +25,7 @@ public:
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
+	void	setBrushDirection(int type);	// called by the UI to set the brush direction
 	int		getSize();						// get the UI size
 	int		getCorner();					// get the UI corner
 	int		getAlpha();						// get the UI alpha

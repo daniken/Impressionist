@@ -23,8 +23,12 @@ public:
 	void startMouseScaling(const Point source, const Point target);
 	void stopMouseScaling(const Point source, const Point target);
 	void dragMouseScaling(const Point source, const Point target);
+	void calculateMouseDirection(const Point source, const Point target);
 	void calculateSizeAndAngle();
 	char* BrushName(void);
+
+	// controls what kind of direction the lines should follow
+	bool mouseDirection;
 };
 
 #endif
