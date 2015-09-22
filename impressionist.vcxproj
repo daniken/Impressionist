@@ -135,7 +135,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AngleGradient.cpp" />
+    <ClCompile Include="AngleMouseDirection.cpp" />
+    <ClCompile Include="AngleMouseRightClick.cpp" />
+    <ClCompile Include="AngleSlider.cpp" />
     <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="ImpAngle.cpp" />
     <ClCompile Include="LineBrush.cpp" />
     <ClCompile Include="PolyBrush.cpp" />
     <ClCompile Include="ImpBrush.cpp" />
@@ -150,7 +155,12 @@
     <ClCompile Include="ScatterPoints.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AngleGradient.h" />
+    <ClInclude Include="AngleMouseDirection.h" />
+    <ClInclude Include="AngleMouseRightClick.h" />
+    <ClInclude Include="AngleSlider.h" />
     <ClInclude Include="bitmap.h" />
+    <ClInclude Include="ImpAngle.h" />
     <ClInclude Include="LineBrush.h" />
     <ClInclude Include="PolyBrush.h" />
     <ClInclude Include="ImpBrush.h" />

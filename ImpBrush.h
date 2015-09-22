@@ -41,30 +41,33 @@ protected:
 public:
 
 	// coordinates for resizing and rotation of lines
+	/*	SHOULD RESIDE IN IMPANGLE
 	int startMouseX;
 	int startMouseY;
 	int stopMouseX;
 	int stopMouseY;
-
+	
 	// coodinates for calculating mouse direction
 	int prevMouseX;
 	int prevMouseY;
 	int currentMouseX;
 	int currentMouseY;
 	bool isDraging;
+	*/
 
 	// The implementation of your brush should realize these virtual functions
 	virtual void BrushBegin( const Point source, const Point target ) = 0;
 	virtual void BrushMove( const Point source, const Point target ) = 0;
 	virtual void BrushEnd( const Point source, const Point target ) = 0;
 
+	/*	SHOULD RESIDE IN IMPANGLE
 	// right mouse button functions
 	void startMouseScaling(const Point source, const Point target);
 	void stopMouseScaling(const Point source, const Point target);
 	void dragMouseScaling(const Point source, const Point target);
 	float getMouseAngle(int x, int y); // returns the angle made by the mouse with the branch 0 deg. input arg are the vector components
 	void calculateSizeAndAngle();
-
+	*/
 
 	// according to the source image and the position, determine the draw color
 	void SetColor( const Point source );

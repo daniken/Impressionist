@@ -18,10 +18,12 @@ public:
 	void BrushBegin(const Point source, const Point target);
 	void BrushMove(const Point source, const Point target);
 	void BrushEnd(const Point source, const Point target);
+	/*
 	void startMouseScaling(const Point source, const Point target);
 	void stopMouseScaling(const Point source, const Point target);
 	void dragMouseScaling(const Point source, const Point target);
 	void calculateSizeAndAngle();
+	*/
 	char* BrushName(void);
 };
 

@@ -31,12 +31,12 @@ void LineBrush::BrushBegin(const Point source, const Point target)
 
 
 
-	mouseDirection = true;
+	//mouseDirection = true;
 	// if mouse direction is chosen
-	if (mouseDirection) {
-		isDraging = true;
-		calculateMouseDirection(source, target);
-	}
+	//if (mouseDirection) {
+		//isDraging = true;
+		
+	//}
 
 	BrushMove(source, target);
 
@@ -47,15 +47,18 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg = pDoc->m_pUI;
 
+
 	if (pDoc == NULL) {
 		printf("PolyBursh::BrushMove  document is NULL\n");
 		return;
 	}
 
-
+	/*
 	if (mouseDirection) {
 		calculateMouseDirection(source, target);
 	}
+	*/
+
 		// size
 		int size = pDoc->getSize();
 		size = size / 2;
@@ -92,40 +95,13 @@ void LineBrush::BrushMove(const Point source, const Point target)
 void LineBrush::BrushEnd(const Point source, const Point target)
 {
 	// stop the calculation of mouse direction 
-	if (mouseDirection) {
+	//if (mouseDirection) {
 		//isDraging = false;
 		//prevMouseX = 0;
 		//prevMouseY = 0;
-	}
+	//}
 	
 }
 
 
-void LineBrush::calculateMouseDirection(const Point source, const Point target){
 
-
-
-	// set current mouse location
-	currentMouseX = target.x;
-	currentMouseY = target.y;
-
-	if (isDraging && prevMouseX != 0 && prevMouseY != 0){
-
-		// calculate the direction vector
-		int x = target.x - prevMouseX;
-		int y = target.y - prevMouseY;
-
-		float angle = ImpBrush::getMouseAngle(x, y);
-
-		ImpressionistDoc * pDoc = GetDocument();
-		pDoc->setAngle((int)angle);
-
-
-	}
-
-	prevMouseX = target.x;
-	prevMouseY = target.y;
-
-
-
-}

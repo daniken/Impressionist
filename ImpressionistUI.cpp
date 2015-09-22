@@ -8,6 +8,7 @@
 #include <FL/fl_ask.h>
 
 #include <math.h>
+#include <iostream>
 
 #include "impressionistUI.h"
 #include "impressionistDoc.h"
@@ -208,6 +209,8 @@ void ImpressionistUI::cb_brushes(Fl_Menu_* o, void* v)
 	whoami(o)->m_brushDialog->show();
 }
 
+
+
 //------------------------------------------------------------
 // Clears the paintview canvas.
 // Called by the UI when the clear canvas menu item is chosen
@@ -227,6 +230,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
+
 
 }
 
@@ -258,25 +262,23 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 	pDoc->setBrushType(type);
 }
 
-
 //------- UI should keep track of the current for all the controls for answering the query from Doc ---------
 //-------------------------------------------------------------
-// Sets the type of brush direction you want to have
-// Called by the UI when a brush directioni is chosen in the brush direction choice
+// Sets the type of angle configuration to use to the one chosen in the angle 
+// choice.  
+// Called by the UI when a brush is chosen in the brush choice
 //-------------------------------------------------------------
-
-/*
-void ImpressionistUI::cb_brushDirectionChoice(Fl_Widget* o, void* v)
+void ImpressionistUI::cb_angleChoice(Fl_Widget* o, void* v)
 {
 	ImpressionistUI* pUI = ((ImpressionistUI *)(o->user_data()));
 	ImpressionistDoc* pDoc = pUI->getDocument();
 
-	int type = (int)v;
-
-
-	pDoc->setBrushType(type);
+	// set integer so the code flow will get the correct angle
+	pDoc->setAngleType((int)v);
 }
-*/
+
+
+
 
 //------------------------------------------------------------
 // Clears the paintview canvas.
@@ -411,7 +413,10 @@ int ImpressionistUI::getAlpha()
 //------------------------------------------------
 int ImpressionistUI::getAngle()
 {
-	return m_nAngle;
+		return m_nAngle;
+
+
+	
 }
 
 //------------------------------------------------
@@ -460,10 +465,47 @@ void ImpressionistUI::setAlpha(int alpha)
 //-------------------------------------------------
 void ImpressionistUI::setAngle(int angle)
 {
-	m_nAngle = angle;
 
-	if (angle <= 360)
+
+	// if user wants to chose with slider
+	if (m_pDoc->getCurrentAngleIntType() == 0) {
+		std::cout << "Angle type 0 was used!" << std::endl;
+		if (angle <= 180 && angle >= 0) {
+			m_BrushAngleSlider->value(m_nAngle);
+			m_nAngle = angle;
+		}
+	}
+
+	// if user wants to use the mouse direction
+	else if (m_pDoc->getCurrentAngleIntType() == 1) {
+		std::cout << "Angle type 1 was used!" << std::endl;
+		m_nAngle = angle;
 		m_BrushAngleSlider->value(m_nAngle);
+
+	}
+
+	// if user wants to use the mouse direction
+	else if (m_pDoc->getCurrentAngleIntType() == 2) {
+		std::cout << "Angle type 2 was used!" << std::endl;
+		m_nAngle = angle;
+		m_BrushAngleSlider->value(m_nAngle);
+
+	}
+
+	// if user wants to use the mouse direction
+	else if (m_pDoc->getCurrentAngleIntType() == 3) {
+		std::cout << "Angle type 3 was used!" << std::endl;
+		m_nAngle = angle;
+		m_BrushAngleSlider->value(m_nAngle);
+
+	}
+
+
+
+	// if angle type == 1
+	//m_nAngle = m_pDoc->getCurrentAngleType()->getAngle();
+
+
 }
 
 //-------------------------------------------------
@@ -506,12 +548,16 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {0}
 };
 
-/*
-Fl_Menu_Item ImpressionistUI::brushTypeMenu[1] = {
-	{ "Mouse direction", FL_ALT + 'f', (Fl_Callback *)ImpressionistUI::cb_brushDirectionChoice, (void *)BRUSH_POINTS },
+// angle choice menu definition
+Fl_Menu_Item ImpressionistUI::angleTypeMenu[NUM_ANGLE_TYPE + 1] = {
+	{ "Angle Slider", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_angleChoice, (void *)ANGLE_SLIDER },
+	{ "Mouse Direction", FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_angleChoice, (void *)ANGLE_MOUSE_DIRECTION },
+	{ "Mouse Right Click", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_angleChoice, (void *)ANGLE_MOUSE_RIGHT_CLICK},
+	{ "Gradient", FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_angleChoice, (void *)ANGLE_GRADIENT },
 	{ 0 }
 };
-*/
+
+
 
 
 //----------------------------------------------------
@@ -560,22 +606,16 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushTypeChoice->menu(brushTypeMenu);
 		m_BrushTypeChoice->callback(cb_brushChoice);
 
+		// Add a angle type choice to the dialog
+		m_AngleTypeChoice = new Fl_Choice(50, 35, 150, 25, "&Angle");
+		m_AngleTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
+		m_AngleTypeChoice->menu(angleTypeMenu);
+		m_AngleTypeChoice->callback(cb_angleChoice);
+
 		m_ClearCanvasButton = new Fl_Button(240,10,150,25,"&Clear Canvas");
 		m_ClearCanvasButton->user_data((void*)(this));
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
 
-		/*
-		Fl_Choice * myChoice = new Fl_Choice(50, 10, 150, 25, "&Stroke Direction");
-		myChoice->user_data((void*)(this));	 // record self to be used by static callback functions
-		Fl_Menu_Item ImpressionistUI::myChoiceMenu[3 + 1] = {
-			{ "one", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_myChoice, (void *)ONE },
-			{ "two", FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_myChoice, (void *)TWO },
-			{ "three", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_myChoice, (void *)THREE },
-			{ 0 }
-		};
-		myChoice->menu(myChoiceMenu);
-		myChoice->callback(cb_myChoice);
-		*/
 
 
 		// Add brush size slider to the dialog 

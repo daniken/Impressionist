@@ -28,7 +28,7 @@ public:
 	char* BrushName(void);
 
 	// controls what kind of direction the lines should follow
-	bool mouseDirection;
+	//bool mouseDirection;
 };
 
 #endif

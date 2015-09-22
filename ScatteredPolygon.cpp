@@ -63,6 +63,11 @@ void ScatteredPolygon::BrushMove(const Point source, const Point target)
 		int x = target.x + randomX;
 		int y = target.y + randomY;
 
+
+		glPushMatrix();
+		glTranslated(x, y, 0);
+		glRotatef(angle, 0.0, 0.0, 1.0);
+		glTranslated(-x, -y, 0);
 		glBegin(GL_POLYGON);
 
 		SetColor(Point(x,y));
@@ -72,6 +77,8 @@ void ScatteredPolygon::BrushMove(const Point source, const Point target)
 		}
 
 		glEnd();
+
+		glPopMatrix();
 
 
 	}
@@ -86,7 +93,7 @@ void ScatteredPolygon::BrushEnd(const Point source, const Point target)
 }
 
 
-
+/*
 void ScatteredPolygon::startMouseScaling(const Point source, const Point target)
 {
 	//std::cout << "-------- - startMouseScaling() called---------" << std::endl;
@@ -161,3 +168,5 @@ void ScatteredPolygon::dragMouseScaling(const Point source, const Point target)
 {
 
 }
+
+*/

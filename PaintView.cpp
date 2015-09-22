@@ -9,6 +9,9 @@
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
+#include "AngleMouseDirection.h"
+#include "AngleMouseRightClick.h"
+#include "AngleGradient.h"
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -111,26 +114,32 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
+			if (m_pDoc->getCurrentAngleIntType() == 3) ((AngleGradient*)m_pDoc->m_pCurrentAngleType)->calculateGradientDirection(source, target);
 			m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+
 			break;
 		case LEFT_MOUSE_DRAG:
+			if (m_pDoc->getCurrentAngleIntType() == 3) ((AngleGradient*)m_pDoc->m_pCurrentAngleType)->calculateGradientDirection(source, target);
+			else if (m_pDoc->getCurrentAngleIntType() == 1) ((AngleMouseDirection*)m_pDoc->m_pCurrentAngleType)->calculateMouseDirection(source, target);
 			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
+			
 			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
 
 			SaveCurrentContent();
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-			m_pDoc->m_pCurrentBrush->startMouseScaling(source, target);
+			if (m_pDoc->getCurrentAngleIntType() == 2) ((AngleMouseRightClick*)m_pDoc->m_pCurrentAngleType)->startMouseScaling(source, target);
+			
 
 			break;
 		case RIGHT_MOUSE_DRAG:
 
 			break;
 		case RIGHT_MOUSE_UP:
-			m_pDoc->m_pCurrentBrush->stopMouseScaling(source, target);
+			if (m_pDoc->getCurrentAngleIntType() == 2) ((AngleMouseRightClick*)m_pDoc->m_pCurrentAngleType)->stopMouseScaling(source, target);
 			break;
 
 		default:

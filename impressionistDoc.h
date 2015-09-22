@@ -24,13 +24,20 @@ public:
 
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
+
 	void	setBrushType(int type);			// called by the UI to set the brushType
-	void	setBrushDirection(int type);	// called by the UI to set the brush direction
+	void	setAngleType(int type);			// called by the UI to record what angle configuration is active
+
+	int		getCurrentAngleIntType();				// called by the UI to set angle depending on what angle type is active
+	ImpAngle*	getCurrentAngleType();
+
+
 	int		getSize();						// get the UI size
 	int		getCorner();					// get the UI corner
 	int		getAlpha();						// get the UI alpha
 	int		getAngle();						// get the UI angle
 	int		getLineWidth();					// get the UI width
+
 	void	setSize(int size);				// set the UI size
 	void	setCorner(int corner);			// set the UIc corner
 	void	setAlpha(int alpha);			// set the UI alpha
@@ -55,13 +62,15 @@ public:
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;
+	ImpAngle*			m_pCurrentAngleType;
 
-	// Size of the brush.
-	int m_nSize;		
-	int m_nCorner;
-	int m_nAlpha;
-	int m_nAngle;
-	int m_nLineWidth;
+	
+	int m_nSize;			// Size of the brush.		
+	int m_nCorner;			// amount of coners for the polygon brush
+	int m_nAlpha;			// alpha value of the brush
+	int m_nAngle;			// angle value of the brush
+	int m_nLineWidth;		// line width of the line brushes
+	int m_nCurrentAngleIntType;	// the corresponding of the active angle configuration
 
 	ImpressionistUI*	m_pUI;
 

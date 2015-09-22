@@ -21,6 +21,7 @@
 #include "PaintView.h"
 
 #include "ImpBrush.h"
+#include "ImpAngle.h"
 
 class ImpressionistUI {
 public:
@@ -36,12 +37,14 @@ public:
 // for brush dialog
 	Fl_Window*			m_brushDialog;
 	Fl_Choice*			m_BrushTypeChoice;
+	Fl_Choice*			m_AngleTypeChoice;
 
 	Fl_Slider*			m_BrushSizeSlider;
 	Fl_Slider*			m_BrushCornerSlider;
 	Fl_Slider*			m_BrushAlphaSlider;
 	Fl_Slider*			m_BrushAngleSlider;
 	Fl_Slider*			m_BrushLineWidthSlider;
+
 	Fl_Button*          m_ClearCanvasButton;
 
 	// Member functions
@@ -63,10 +66,12 @@ public:
 	void				setAlpha(int alpha);
 	void				setAngle(int angle);
 	void				setLineWidth(int width);
+	//ImpAngle*			getCurrentAngleType(int type);
 
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
+
 
 	// All attributes here
 	int		m_nSize;
@@ -75,9 +80,14 @@ private:
 	int		m_nAngle;
 	int		m_nLineWidth;
 
+	// static attributes
+	static int		m_nCurrentAngleIntType;
+
+
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
+	static Fl_Menu_Item		angleTypeMenu[NUM_ANGLE_TYPE + 1];
 
 	static ImpressionistUI*	whoami(Fl_Menu_* o);
 
@@ -86,10 +96,12 @@ private:
 	static void	cb_load_image(Fl_Menu_* o, void* v);
 	static void	cb_save_image(Fl_Menu_* o, void* v);
 	static void	cb_brushes(Fl_Menu_* o, void* v);
+	static void	cb_angles(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
+	static void	cb_angleChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
 	static void	cb_sizeSlides(Fl_Widget* o, void* v);
 	static void	cb_cornerSlides(Fl_Widget* o, void* v);

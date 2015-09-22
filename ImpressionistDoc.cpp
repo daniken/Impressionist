@@ -11,6 +11,7 @@
 #include "impressionistUI.h"
 
 #include "ImpBrush.h"
+#include "ImpAngle.h"
 
 // Include individual brush headers here.
 #include "PointBrush.h"
@@ -19,6 +20,12 @@
 #include "LineBrush.h"
 #include "ScatteredPolygon.h"
 #include "ScatteredLines.h"
+
+// Include individual angle headers here.
+#include "AngleSlider.h" 
+#include "AngleMouseDirection.h"
+#include "AngleMouseRightClick.h"
+#include "AngleGradient.h"
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -37,8 +44,11 @@ ImpressionistDoc::ImpressionistDoc()
 	ImpBrush::c_nBrushCount	= NUM_BRUSH_TYPE;
 	ImpBrush::c_pBrushes	= new ImpBrush* [ImpBrush::c_nBrushCount];
 
-	ImpBrush::c_pBrushes[BRUSH_POINTS]	= new PointBrush( this, "Points" );
+	// create one instance of each angle type
+	ImpAngle::c_nAngleCount = NUM_ANGLE_TYPE;
+	ImpAngle::c_pAngles = new ImpAngle* [ImpAngle::c_nAngleCount];
 
+	ImpBrush::c_pBrushes[BRUSH_POINTS]	= new PointBrush( this, "Points" );
 	// Note: You should implement these 5 brushes.  They are set the same (PointBrush) for now
 	ImpBrush::c_pBrushes[BRUSH_LINES]				
 		= new LineBrush( this, "Lines" );
@@ -51,8 +61,22 @@ ImpressionistDoc::ImpressionistDoc()
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]	
 		= new ScatteredPolygon( this, "Scattered Polygon" );
 
+
+
+
+
+	// initialize all the angle types
+	ImpAngle::c_pAngles[ANGLE_SLIDER] = new AngleSlider(this, "Angle Slider");
+	ImpAngle::c_pAngles[ANGLE_MOUSE_DIRECTION] = new AngleMouseDirection(this, "Mouse Direction");
+	ImpAngle::c_pAngles[ANGLE_MOUSE_RIGHT_CLICK] = new AngleMouseRightClick(this, "Mouse Right Click");
+	ImpAngle::c_pAngles[ANGLE_GRADIENT] = new AngleGradient(this, "Gradient");
+
+
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
+
+	// make one of the angle types current
+	m_pCurrentAngleType = ImpAngle::c_pAngles[0];
 
 }
 
@@ -82,15 +106,23 @@ void ImpressionistDoc::setBrushType(int type)
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[type];
 }
 
-
-//---------------------------------------------------------
-// Called by the UI when the user changes the brush direction.
-// type: one of the defined brush direction types.
-//---------------------------------------------------------
-void ImpressionistDoc::setBrushDirection(int type)
+void ImpressionistDoc::setAngleType(int type)
 {
-	//if (type == 1) m_pCurrentBrush->(LineBrush)setMouseDirection(true);
+	m_pCurrentAngleType = ImpAngle::c_pAngles[type];
+	m_nCurrentAngleIntType = type;
 }
+
+
+ImpAngle* ImpressionistDoc::getCurrentAngleType() {
+
+	return m_pCurrentAngleType;
+}
+
+int ImpressionistDoc::getCurrentAngleIntType() {
+
+	return m_nCurrentAngleIntType;
+}
+
 
 //---------------------------------------------------------
 // Returns the size of the brush.
